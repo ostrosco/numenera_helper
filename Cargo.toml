@@ -1,0 +1,10 @@
+[package]
+name = "numenera_helper"
+version = "0.1.0"
+authors = ["ostrosco <ostrosco@fastmail.fm>"]
+edition = "2018"
+
+[dependencies]
+rand = "0.7"
+regex = "1"
+rusqlite = "0.19"
