@@ -7,6 +7,7 @@ mod salvage;
 mod utils;
 
 use crate::error::NumeneraError;
+use crate::utils::roll_dice;
 
 fn main() -> Result<(), NumeneraError> {
     let conn = Connection::open("./numenera.db")?;
@@ -56,9 +57,12 @@ fn main() -> Result<(), NumeneraError> {
     }
 
     if let Some(matches) = matches.subcommand_matches("loot") {
-        let num_cyphers = value_t!(matches, "cyphers", u8).unwrap_or(0);
-        let num_artifacts = value_t!(matches, "artifacts", u8).unwrap_or(0);
-        let num_oddities = value_t!(matches, "oddities", u8).unwrap_or(0);
+        let num_cyphers =
+            roll_dice(matches.value_of("cyphers").unwrap_or("0"))?;
+        let num_artifacts =
+            roll_dice(matches.value_of("artifacts").unwrap_or("0"))?;
+        let num_oddities =
+            roll_dice(matches.value_of("oddities").unwrap_or("0"))?;
 
         for _ in 0..num_cyphers {
             println!("{:#?}", item::get_cypher(&conn)?);

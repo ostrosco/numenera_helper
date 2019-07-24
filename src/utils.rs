@@ -25,9 +25,9 @@ pub fn d100() -> u8 {
     roll(d100)
 }
 
-pub fn roll_dice(dice_str: String) -> Result<u8, NumeneraError> {
+pub fn roll_dice(dice_str: &str) -> Result<u8, NumeneraError> {
     let dice_re = Regex::new("(\\d+)d(\\d+)(?:\\s*\\+\\s*(\\d+))?*")?;
-    match dice_re.captures(&dice_str) {
+    match dice_re.captures(dice_str) {
         Some(captures) => {
             let num_rolls = str::parse::<u8>(
                 captures

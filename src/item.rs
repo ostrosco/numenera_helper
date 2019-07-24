@@ -54,7 +54,7 @@ pub fn get_iotum(conn: &Connection, item_level: u8) -> SqlResult<Iotum> {
                     value: value * item_level,
                 })
             } else {
-                let units_salvaged = roll_dice(units_salvaged.unwrap())
+                let units_salvaged = roll_dice(&units_salvaged.unwrap())
                     .map_err(|_| rusqlite::Error::InvalidQuery)?;
                 Ok(Iotum {
                     name,
@@ -90,7 +90,8 @@ pub fn get_cypher(conn: &Connection) -> SqlResult<Cypher> {
          ORDER BY RANDOM() LIMIT 1",
         NO_PARAMS,
         |row| {
-            let level = roll_dice(row.get(1)?)
+            let level_str: String = row.get(1)?;
+            let level = roll_dice(&level_str)
                 .map_err(|_| rusqlite::Error::InvalidQuery)?;
             Ok(Cypher {
                 name: row.get(0)?,
@@ -108,7 +109,8 @@ pub fn get_artifact(conn: &Connection) -> SqlResult<Artifact> {
          ORDER BY RANDOM() LIMIT 1",
         NO_PARAMS,
         |row| {
-            let level = roll_dice(row.get(1)?)
+            let level_str: String = row.get(1)?;
+            let level = roll_dice(&level_str)
                 .map_err(|_| rusqlite::Error::InvalidQuery)?;
             Ok(Artifact {
                 name: row.get(0)?,
