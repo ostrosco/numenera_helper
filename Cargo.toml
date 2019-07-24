@@ -5,6 +5,7 @@ authors = ["ostrosco <ostrosco@fastmail.fm>"]
 edition = "2018"
 
 [dependencies]
+clap = "2.33"
 rand = "0.7"
 regex = "1"
 rusqlite = "0.19"

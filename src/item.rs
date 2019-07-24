@@ -12,19 +12,26 @@ pub struct Iotum {
 
 #[derive(Debug)]
 pub struct Oddity {
-    description: String,
+    table: String,
+    book: String,
+    page_number: u16,
+    entry: u8,
 }
 
 #[derive(Debug)]
 pub struct Cypher {
     name: String,
     level: u8,
+    book: String,
+    page_number: u16,
 }
 
 #[derive(Debug)]
 pub struct Artifact {
     name: String,
     level: u8,
+    book: String,
+    page_number: u16,
 }
 
 pub fn get_iotum(conn: &Connection, item_level: u8) -> SqlResult<Iotum> {
@@ -61,12 +68,17 @@ pub fn get_iotum(conn: &Connection, item_level: u8) -> SqlResult<Iotum> {
 }
 
 pub fn get_oddity(conn: &Connection) -> SqlResult<Oddity> {
+    let roll = d100();
     conn.query_row(
-        "SELECT description FROM oddities ORDER BY RANDOM() LIMIT 1",
+        "SELECT oddity_table, book, page_number FROM oddities
+         ORDER BY RANDOM() LIMIT 1",
         NO_PARAMS,
         |row| {
             Ok(Oddity {
-                description: row.get(0)?,
+                table: row.get(0)?,
+                book: row.get(1)?,
+                page_number: row.get(2)?,
+                entry: roll,
             })
         },
     )
@@ -74,7 +86,8 @@ pub fn get_oddity(conn: &Connection) -> SqlResult<Oddity> {
 
 pub fn get_cypher(conn: &Connection) -> SqlResult<Cypher> {
     conn.query_row(
-        "SELECT name, level FROM cyphers ORDER BY RANDOM() LIMIT 1",
+        "SELECT name, level, book, page_number FROM cyphers 
+         ORDER BY RANDOM() LIMIT 1",
         NO_PARAMS,
         |row| {
             let level = roll_dice(row.get(1)?)
@@ -82,6 +95,8 @@ pub fn get_cypher(conn: &Connection) -> SqlResult<Cypher> {
             Ok(Cypher {
                 name: row.get(0)?,
                 level,
+                book: row.get(2)?,
+                page_number: row.get(3)?,
             })
         },
     )
@@ -89,7 +104,8 @@ pub fn get_cypher(conn: &Connection) -> SqlResult<Cypher> {
 
 pub fn get_artifact(conn: &Connection) -> SqlResult<Artifact> {
     conn.query_row(
-        "SELECT name, level FROM artifacts ORDER BY RANDOM() LIMIT 1",
+        "SELECT name, level, book, page_number FROM artifacts
+         ORDER BY RANDOM() LIMIT 1",
         NO_PARAMS,
         |row| {
             let level = roll_dice(row.get(1)?)
@@ -97,6 +113,8 @@ pub fn get_artifact(conn: &Connection) -> SqlResult<Artifact> {
             Ok(Artifact {
                 name: row.get(0)?,
                 level,
+                book: row.get(2)?,
+                page_number: row.get(3)?,
             })
         },
     )
