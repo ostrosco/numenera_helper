@@ -20,11 +20,6 @@ pub fn d10() -> u8 {
     roll(d10)
 }
 
-pub fn d20() -> u8 {
-    let d20 = Uniform::new_inclusive(1, 20);
-    roll(d20)
-}
-
 pub fn d100() -> u8 {
     let d100 = Uniform::new_inclusive(1, 100);
     roll(d100)
